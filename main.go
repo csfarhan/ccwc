@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"ccwc/helper"
 	"flag"
 	"fmt"
@@ -10,24 +11,35 @@ import (
 func main() {
 	// Init flag variables
 	var bytesFlag, linesFlag, wordsFlag, charsFlag bool
-	flag.BoolVar(&bytesFlag, "c", false, "")
-	flag.BoolVar(&linesFlag, "l", false, "")
-	flag.BoolVar(&wordsFlag, "w", false, "")
-	flag.BoolVar(&charsFlag, "m", false, "")
+	flag.BoolVar(&bytesFlag, "c", false, "Count bytes")
+	flag.BoolVar(&linesFlag, "l", false, "Count lines")
+	flag.BoolVar(&wordsFlag, "w", false, "Count words")
+	flag.BoolVar(&charsFlag, "m", false, "Count characters")
 	flag.Parse()
 
+	// Default to all flags if none are provided
+	if !bytesFlag && !linesFlag && !wordsFlag && !charsFlag {
+		bytesFlag, linesFlag, wordsFlag, charsFlag = true, true, true, true
+	}
+
 	// Get filename from command line
+	fileName := ""
 	args := flag.Args()
 	if len(args) != 1 {
-		fmt.Println("Please provide a filename.")
-		return
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			line := scanner.Text()
+			fileName = line
+			break
+		}
+	} else {
+		fileName = args[0]
 	}
-	fileName := args[0]
 
 	// Obtain file info
 	file, err := os.Stat(fileName)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("File does not exist")
 		return
 	}
 
