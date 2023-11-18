@@ -55,7 +55,7 @@ func main() {
 	if wordsFlag {
 		fmt.Println("Words in file:", helper.WordsInFile(fileName))
 	}
-
+	// Print number of characters
 	if charsFlag {
 		fmt.Println("Characters in file:", helper.CharInFile(fileName))
 	}
